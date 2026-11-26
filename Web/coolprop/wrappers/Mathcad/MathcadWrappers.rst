@@ -1129,3 +1129,50 @@ A simple example of a call to ``PropsSI`` using variables with units is,
 
 .. note::
     Technically, if input variables are not "stripped" of units, they will be passed as values in Mathcad's default Base Units, which are SI.  This is compatible with CoolProp's base units of SI and will work.  However, units still have to be applied to the result and units should be stripped explicitely, as shown above since Mathcad allows the Base Units to be changed.  This will guarantee consistency of units between Mathcad and CoolProp.
+
+Direct IF97 Add-in
+==================
+
+For water and steam only, a second add-in that calls the IAPWS-IF97 formulation directly (with no CoolProp in the loop) is shipped in the ``IF97-only`` sub-folder of the :sfdownloads:`MathcadPrime` folder.  It is built from the `CoolProp/IF97 <https://github.com/CoolProp/IF97>`_ repository, and all of its functions begin with ``if97_`` so they do not conflict with other add-ins.  The folder holds two builds of the add-in, a pair of matching include worksheets, and a README with the details:
+
+* ``IF97-SI.dll`` with ``if97_Units_SI.mcdx``: pressure in Pa and energy in J
+* ``IF97-IAPWS.dll`` with ``if97_Units_IAPWS.mcdx``: pressure in MPa and energy in kJ, for easy comparison with IAPWS tables
+
+.. warning::
+    The two IF97 DLLs define the same functions and must **never** be installed at the same time.  Install exactly one, in the Mathcad Prime ``Custom Functions`` folder.
+
+Speed
+-----
+
+The direct add-in is the fastest way to get IF97 properties into Mathcad.  The table below shows the time for one sweep of 1,000 temperatures from 273.16 K to 2000 K at 10 MPa, evaluating enthalpy, entropy, density, and speed of sound at each point (4,000 values).  Times are the median of five full recalculations in Mathcad Prime 12.  The low-level calls create the state once, then use ``AS_update`` once per point and ``AS_get`` for each property.
+
+.. list-table::
+    :header-rows: 1
+    :widths: 60 20 20
+
+    * - Route
+      - ms per sweep
+      - vs. direct add-in
+    * - Low-level ``SVDSBTL&IF97``
+      - 1.6
+      - 0.94x
+    * - Direct IF97 add-in
+      - 1.7
+      - 1.0x
+    * - Low-level ``IF97::Water``
+      - 2.3
+      - 1.4x
+    * - Low-level ``HEOS``
+      - 7.4
+      - 4.4x
+    * - ``PropsSI`` with ``IF97::Water``
+      - 11.9
+      - 7.0x
+    * - ``PropsSI`` with ``HEOS``
+      - 220
+      - 129x
+    * - ``PropsSI`` with ``SVDSBTL&IF97`` (estimated from 100 points)
+      - about 4,150
+      - about 2,400x
+
+The ``SVDSBTL&IF97`` backend is only available in ``PropsSI`` when the configuration key ``ALLOW_SVDSBTL_IN_PROPSSI`` is set to true.  Each ``PropsSI`` call rebuilds the backend, which is why it is slow here; use the low-level calls to get the benefit of the interpolation tables.  The SVDSBTL backend does not provide specific heats, so these were left out of the comparison.
