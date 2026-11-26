@@ -22,7 +22,12 @@ Like the CoolProp add-in, it uses SI units: pressure in Pa, energy in J.
 | `PropsSI` with `HEOS` | 220 | 129x |
 | `PropsSI` with `SVDSBTL&IF97` | about 4,150 | about 2,400x |
 
-The `SVDSBTL&IF97` low-level route is as fast but is a table interpolation, not the exact formulation, and it has no heat capacity (cp). The `PropsSI` `SVDSBTL&IF97` time was measured on 100 points and scaled to 1,000.
+The `SVDSBTL&IF97` routes have drawbacks that the direct add-in does not:
+
+* Heat capacities (cp and cv) are not implemented.
+* The lookup table carries some error relative to the exact values the direct add-in returns (see the CoolProp online documentation for the accuracy).
+
+The `PropsSI` `SVDSBTL&IF97` time was measured on 100 points and scaled to 1,000.
 
 ## What is in the folder
 
