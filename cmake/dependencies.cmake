@@ -163,7 +163,7 @@ CPMAddPackage(
 CPMAddPackage(
   NAME IF97
   GIT_REPOSITORY https://github.com/CoolProp/IF97
-  GIT_TAG        50b6559a7dd91e5b88fd681b86ba52f221ef40c3
+  GIT_TAG        903746c01679605ad8a67c63cb3819830b7e1ffa
   DOWNLOAD_ONLY  YES
 )
 
