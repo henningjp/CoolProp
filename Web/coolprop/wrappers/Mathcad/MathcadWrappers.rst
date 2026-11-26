@@ -1133,13 +1133,7 @@ A simple example of a call to ``PropsSI`` using variables with units is,
 Direct IF97 Add-in
 ==================
 
-For water and steam only, a second add-in that calls the IAPWS-IF97 formulation directly (with no CoolProp in the loop) is shipped in the ``IF97-only`` sub-folder of the :sfdownloads:`MathcadPrime` folder.  It is built from the `CoolProp/IF97 <https://github.com/CoolProp/IF97>`_ repository, and all of its functions begin with ``if97_`` so they do not conflict with other add-ins.  The folder holds two builds of the add-in, a pair of matching include worksheets, and a README with the details:
-
-* ``IF97-SI.dll`` with ``if97_Units_SI.mcdx``: pressure in Pa and energy in J
-* ``IF97-IAPWS.dll`` with ``if97_Units_IAPWS.mcdx``: pressure in MPa and energy in kJ, for easy comparison with IAPWS tables
-
-.. warning::
-    The two IF97 DLLs define the same functions and must **never** be installed at the same time.  Install exactly one, in the Mathcad Prime ``Custom Functions`` folder.
+For water and steam only, a second add-in that calls the IAPWS-IF97 formulation directly (with no CoolProp in the loop) is shipped in the ``IF97-only`` sub-folder of the :sfdownloads:`MathcadPrime` folder.  It is built from the `CoolProp/IF97 <https://github.com/CoolProp/IF97>`_ repository, and all of its functions begin with ``if97_`` so they do not conflict with other add-ins.  Like the CoolProp add-in, it uses SI units (pressure in Pa and energy in J).  The folder holds ``IF97-SI.dll``, the matching include worksheet ``if97_Units_SI.mcdx``, and a README with the details.  Copy the DLL into the Mathcad Prime ``Custom Functions`` folder and restart Mathcad Prime.
 
 Speed
 -----

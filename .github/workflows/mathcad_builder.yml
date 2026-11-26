@@ -59,8 +59,7 @@ jobs:
 
     # Direct IF97 add-in (no CoolProp), shipped in MathcadPrime/IF97-only.  Built
     # from the same IF97 commit CoolProp itself pins in cmake/dependencies.cmake,
-    # once with SI units (Pa, J) and once with IAPWS units (MPa, kJ).  The two DLLs
-    # define the same if97_ functions, so the README tells users to install only one.
+    # with SI units (Pa, J) like the CoolProp wrapper.
     - name: Build IF97-only add-ins
       shell: bash
       run: |
@@ -85,20 +84,11 @@ jobs:
           -DIF97_PRIME_DLL_NAME:STRING=IF97-SI
         cmake --build build_if97_si --config Release -j "$JOBS"
 
-        cmake -S if97_src -B build_if97_iapws \
-          -DIF97_PRIME_MODULE:BOOL=ON \
-          -DIF97_PRIME_ROOT:STRING="${{ github.workspace }}" \
-          -DIF97_PRIME_DLL_NAME:STRING=IF97-IAPWS \
-          -DIF97_IAPWS_UNITS:BOOL=ON
-        cmake --build build_if97_iapws --config Release -j "$JOBS"
-
         # Stage.  `cp` fails (and set -e stops the step) if any file is missing.
         DEST=install_root/MathcadPrime/IF97-only
         mkdir -p "$DEST"
         cp build_if97_si/Release/IF97-SI.dll "$DEST/"
-        cp build_if97_iapws/Release/IF97-IAPWS.dll "$DEST/"
         cp if97_src/wrapper/Mathcad/Units/if97_Units_SI.mcdx "$DEST/"
-        cp if97_src/wrapper/Mathcad/Units/if97_Units_IAPWS.mcdx "$DEST/"
         cp wrappers/MathCAD/Prime/IF97-only/README.md "$DEST/"
         # Example worksheet(s) kept next to the README in this repository
         for f in wrappers/MathCAD/Prime/IF97-only/*.mcdx; do
